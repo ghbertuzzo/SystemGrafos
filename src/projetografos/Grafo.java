@@ -17,17 +17,7 @@ public class Grafo {
     public int[][] geraMatrizAdj(Grafo g){
         int matriz[][] = new int[g.getListaVertices().size()][g.getListaVertices().size()];
         
-        for(int i=0;i<g.getListaVertices().size();i++){
-            for(int j=0;j<g.getListaVertices().size();j++){
-                for(int k=0;k<g.getListaArestas().size();k++){
-                    if(g.getListaVertices().get(i).getId() == g.getListaArestas().get(k).getOrigem().getId())
-                        matriz[i][j]=1;
-                    else
-                        matriz[i][j]=0;     
-
-                }
-            }
-        }
+        
         return matriz;
     }
     
@@ -70,6 +60,14 @@ public class Grafo {
         Vertice v1 = new Vertice(id);
         g.getListaVertices().add(v1);
         return g;
+    }
+    
+    public Vertice getVertice (Integer id, Grafo g){
+        for(Vertice v1: g.getListaVertices()){
+            if(v1.getId()==id)
+                return v1;
+        }
+        return null;
     }
     
     public Grafo removeVertice (Integer id, Grafo g){       
