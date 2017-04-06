@@ -120,6 +120,18 @@ public class Grafo {
         return false;
     }
     
+    public void removeAresta(Vertice vorigem, Vertice vdestino, Grafo g){
+        if(g.getListaArestas().size()<=0)
+            System.out.println("O grafo não possui esta aresta");
+        for(Aresta a: g.getListaArestas()){
+            if((vorigem == a.getOrigem()) && (vdestino == a.getDestino())){
+                g.getListaArestas().remove(a);
+                return;
+            }
+        }
+        System.out.println("O grafo não possui esta aresta");
+    }
+    
     public Grafo addAresta(Vertice vorigem, Vertice vdestino, Grafo g){
         boolean temOrigem = false;
         boolean temDestino = false;

@@ -26,10 +26,12 @@ public class ProjetoGrafos {
         while(resp!=0){
             System.out.println("\n1-Imprimir Grafo");
             System.out.println("2-Adicionar Vértice");
-            System.out.println("3-Adicionar Aresta");
-            System.out.println("4-Adicionar Aresta Ponderada");
-            System.out.println("5-Gerar Lista de Adjacência");
-            System.out.println("6-Gerar Matriz de Adjacência");
+            System.out.println("3-Remover Vértice");
+            System.out.println("4-Adicionar Aresta");
+            System.out.println("5-Adicionar Aresta Ponderada");
+            System.out.println("6-Remover Aresta");
+            System.out.println("7-Gerar Lista de Adjacência");
+            System.out.println("8-Gerar Matriz de Adjacência");
             System.out.println("0-Sair\n");
             Scanner sc = new Scanner(System.in);
             resp = sc.nextInt();
@@ -41,6 +43,11 @@ public class ProjetoGrafos {
                 resp2 = sc2.nextInt();
                 grafo.addVertice(resp2, grafo);
             }else if(resp==3){
+                System.out.println("Informe ID do vértice:");
+                Scanner sc2 = new Scanner(System.in);
+                resp2 = sc2.nextInt();
+                grafo.removeVertice(resp2, grafo);
+            }else if(resp==4){
                 System.out.println("Informe ID do vértice de origem:");
                 Scanner sc2 = new Scanner(System.in);
                 resp2 = sc2.nextInt();
@@ -48,7 +55,7 @@ public class ProjetoGrafos {
                 Scanner sc3 = new Scanner(System.in);
                 resp3 = sc3.nextInt();
                 grafo.addAresta(grafo.getVertice(resp2, grafo) , grafo.getVertice(resp3, grafo), grafo);
-            }else if(resp==4){
+            }else if(resp==5){
                 System.out.println("Informe ID do vértice de origem:");
                 Scanner sc2 = new Scanner(System.in);
                 resp2 = sc2.nextInt();
@@ -59,10 +66,18 @@ public class ProjetoGrafos {
                 Scanner sc4 = new Scanner(System.in);
                 resp4 = sc4.nextDouble();
                 grafo.addArestaPonderada(grafo.getVertice(resp2, grafo), grafo.getVertice(resp3, grafo), resp4,grafo);
-            }else if(resp==5){
+            }else if(resp==6){
+                System.out.println("Informe ID do vértice de origem da aresta:");
+                Scanner sc2 = new Scanner(System.in);
+                resp2 = sc2.nextInt();
+                System.out.println("Informe ID do vértice de destino da aresta:");
+                Scanner sc3 = new Scanner(System.in);
+                resp3 = sc3.nextInt();
+                grafo.removeAresta(grafo.getVertice(resp2, grafo), grafo.getVertice(resp3, grafo), grafo);
+            }else if(resp==7){
                 ArrayList<ArrayList<Vertice>> listaadj = grafo.geraListaAdj(grafo);
                 grafo.printLista(listaadj, grafo);
-            }else if(resp==6){
+            }else if(resp==8){
                 int[][] matriz = grafo.geraMatrizAdj(grafo);
                 grafo.printMatriz(matriz, grafo);
             }else{
