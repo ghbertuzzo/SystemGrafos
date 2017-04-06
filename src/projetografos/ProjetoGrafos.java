@@ -64,7 +64,7 @@ public class ProjetoGrafos {
                 grafo.printLista(listaadj, grafo);
             }else if(resp==6){
                 int[][] matriz = grafo.geraMatrizAdj(grafo);
-                //grafo.printMatriz(matriz, grafo);
+                grafo.printMatriz(matriz, grafo);
             }else{
                 System.out.println("System close");
                 System.exit(0);
@@ -72,29 +72,7 @@ public class ProjetoGrafos {
         }
         
         
-//        grafo.addVertice(0, grafo);
-//        grafo.addVertice(1, grafo);
-//        grafo.addVertice(2, grafo);
-//        grafo.addVertice(3, grafo);
-//        grafo.addVertice(4, grafo);
-//        grafo.addVertice(5, grafo);
-//        grafo.removeVertice(5, grafo);
-//        grafo.addAresta(grafo.getListaVertices().get(0), grafo.getListaVertices().get(1), grafo);
-//        grafo.addAresta(grafo.getListaVertices().get(1), grafo.getListaVertices().get(2), grafo);
-//        grafo.addAresta(grafo.getListaVertices().get(0), grafo.getListaVertices().get(3), grafo);
-//        grafo.addAresta(grafo.getListaVertices().get(0), grafo.getListaVertices().get(4), grafo);
-//        grafo.addAresta(grafo.getListaVertices().get(1), grafo.getListaVertices().get(4), grafo);
-//        grafo.addArestaPonderada(grafo.getListaVertices().get(3), grafo.getListaVertices().get(4), 5.5,grafo);
-//        ArrayList<ArrayList<Vertice>> resp = grafo.geraListaAdj(grafo);
-//        grafo.printLista(resp, grafo);
-//        int[][] m = grafo.geraMatrizAdj(grafo);
-//        for(int i=0;i<5;i++){
-//            for(int j=0;j<5;j++){
-//                System.out.print(m[i][j]);
-//            }
-//            System.out.println("");
-//        }
-//        System.out.print("teste");
+
     }
     
 }

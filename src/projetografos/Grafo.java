@@ -16,9 +16,30 @@ public class Grafo {
     
     public int[][] geraMatrizAdj(Grafo g){
         int matriz[][] = new int[g.getListaVertices().size()][g.getListaVertices().size()];
-        
+        for(int i=0;i<g.getListaVertices().size();i++){
+            for(int j=0;j<g.getListaVertices().size();j++){
+                matriz[i][j]=0;
+            }
+        }
+        for(Aresta a1: g.getListaArestas()){
+            matriz[getIndex(a1.getOrigem(),g)][getIndex(a1.getDestino(),g)]=1;
+        }
         
         return matriz;
+    }
+    public int getIndex(Vertice v, Grafo g){
+        for(Aresta a1: g.getListaArestas()){
+            if((a1.getDestino()==v)||(a1.getOrigem()==v)){
+                int cont=0;
+                for(int i=0;i<g.getListaVertices().size();i++){
+                    if(v==g.getListaVertices().get(i))
+                        return cont;
+                    else
+                        cont++;
+                }
+            }
+        }
+        return -1;
     }
     
     public ArrayList<ArrayList<Vertice>> geraListaAdj(Grafo g){
@@ -170,4 +191,13 @@ public class Grafo {
     }
     ArrayList<Vertice> listaVertices;
     ArrayList<Aresta> listaArestas;
+
+    void printMatriz(int[][] matriz, Grafo grafo) {
+        for(int i=0;i<grafo.getListaVertices().size();i++){
+            for(int j=0;j<grafo.getListaVertices().size();j++){
+                System.out.print(matriz[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
 }
