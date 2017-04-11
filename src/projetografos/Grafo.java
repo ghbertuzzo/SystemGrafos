@@ -6,7 +6,6 @@
 package projetografos;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -65,6 +64,39 @@ public class Grafo {
         }
     }
     
+    public void initBFS(Grafo grafo, Vertice vInic){
+        for(Vertice v: grafo.getListaVertices()){
+            v.color=0;
+            v.dist=0;
+            v.predecessor=null;
+        }
+        vInic.color=1;
+        vInic.dist=0;
+        vInic.predecessor=null;        
+        System.out.println("Iniciando busca no Vertice: "+vInic.getId()+" \nCor: "+vInic.getColor()+" \nDistância: "+vInic.getDist());
+        ArrayList<Vertice> filaBFS = new ArrayList<>();
+        ArrayList<Vertice> listaBusca = new ArrayList<>();
+        filaBFS.add(vInic);
+        while(filaBFS.size()!=0){
+            Vertice v1 = filaBFS.get(0);
+            filaBFS.remove(0);
+            for(Vertice vAdj: (geraListaAdj(grafo).get(getIndex(v1, grafo)))){
+                if(vAdj.getColor()==0){
+                    vAdj.setColor(1);//SETA COR CINZA DESCOBRE VERTICE
+                    listaBusca.add(vAdj);
+                    vAdj.setDist(v1.getDist()+1);
+                    vAdj.setPredecessor(v1);                    
+                    //System.out.println("Vertice: "+vAdj.getId()+" Cor: "+vAdj.getColor()+" Distância: "+vAdj.getDist());
+                    filaBFS.add(vAdj);
+                }
+            }
+            v1.setColor(2);//SET COR PRETA
+            //System.out.println("Vertice: "+v1.getId()+" Cor: "+v1.getColor()+" Distância: "+v1.getDist());
+        }
+        for(Vertice v: listaBusca){
+            System.out.println("Vertice: "+v.getId()+" Cor: "+v.getColor()+" Distância: "+v.getDist());
+        }
+    }
     
     public Grafo iniciaGrafo(){
         ArrayList<Vertice> listVertices = new ArrayList<Vertice>();
@@ -205,7 +237,13 @@ public class Grafo {
     ArrayList<Aresta> listaArestas;
 
     void printMatriz(int[][] matriz, Grafo grafo) {
+        System.out.print("  ");
+        for(Vertice v1: grafo.getListaVertices()){
+            System.out.print("v"+v1.getId().toString());
+        }
+        System.out.println("");
         for(int i=0;i<grafo.getListaVertices().size();i++){
+            System.out.print("v"+grafo.getListaVertices().get(i).getId().toString()+" ");
             for(int j=0;j<grafo.getListaVertices().size();j++){
                 System.out.print(matriz[i][j]+" ");
             }

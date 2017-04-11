@@ -32,6 +32,7 @@ public class ProjetoGrafos {
             System.out.println("6-Remover Aresta");
             System.out.println("7-Gerar Lista de Adjacência");
             System.out.println("8-Gerar Matriz de Adjacência");
+            System.out.println("9-Busca em Largura");
             System.out.println("0-Sair\n");
             Scanner sc = new Scanner(System.in);
             resp = sc.nextInt();
@@ -80,6 +81,12 @@ public class ProjetoGrafos {
             }else if(resp==8){
                 int[][] matriz = grafo.geraMatrizAdj(grafo);
                 grafo.printMatriz(matriz, grafo);
+            }else if(resp==9){
+                System.out.println("Informe ID do vértice inicial da busca: ");
+                Scanner sc2 = new Scanner(System.in);
+                resp2 = sc2.nextInt();
+                Vertice busca = grafo.getVertice(resp2, grafo);
+                grafo.initBFS(grafo, busca);
             }else{
                 System.out.println("System close");
                 System.exit(0);
