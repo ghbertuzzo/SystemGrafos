@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public class Grafo {
     
+    Integer tempo;
+    ArrayList<Vertice> ordenTop;
     public int[][] geraMatrizAdj(Grafo g){
         int matriz[][] = new int[g.getListaVertices().size()][g.getListaVertices().size()];
         for(int i=0;i<g.getListaVertices().size();i++){
@@ -27,6 +29,7 @@ public class Grafo {
         return matriz;
     }
     public int getIndex(Vertice v, Grafo g){
+        
         for(Aresta a1: g.getListaArestas()){
             if((a1.getDestino()==v)||(a1.getOrigem()==v)){
                 int cont=0;
@@ -38,7 +41,14 @@ public class Grafo {
                 }
             }
         }
-        return -1;
+        int j=0;
+        for(Vertice v2 : g.getListaVertices()){
+            if(v==v2)
+                return j;
+            else
+                j++;
+        }
+        return 0;
     }
     
     public ArrayList<ArrayList<Vertice>> geraListaAdj(Grafo g){
@@ -64,38 +74,142 @@ public class Grafo {
         }
     }
     
-    public void initBFS(Grafo grafo, Vertice vInic){
+    public void OrdenacaoTopologica(){
+        initDFS(this, this.getListaVertices().get(0));
+        ArrayList<Vertice> aux = new ArrayList<>();
+        int i=ordenTop.size();
+        while(i!=0){
+            aux.add(ordenTop.get(i-1));
+            i--;
+        }
+        for(Vertice v : aux){
+            System.out.println("Vertice v"+v.getId()+"\nTempo Finalização: "+v.getTfinal()+"\nTempo descoberto: "+v.getTdescoberto());
+        }
+    }
+    public void DFSVisit(Grafo grafo, Vertice vertice){        
+        tempo = tempo+1;
+        vertice.setTdescoberto(tempo);
+        vertice.setColor(1);
+        if((geraListaAdj(grafo).get(getIndex(vertice, grafo)))!=null){
+            if((geraListaAdj(grafo).get(getIndex(vertice, grafo))).size()>0){
+                for(Vertice vadj2: (geraListaAdj(grafo).get(getIndex(vertice, grafo)))){
+                    if(vadj2.getColor()==0){
+                        vadj2.setPredecessor(vertice);                        
+                        DFSVisit(grafo, vadj2);
+                    }
+
+                }
+            }
+        }
+        vertice.setColor(2);
+        tempo=tempo+1;
+        vertice.setTfinal(tempo);
+        ordenTop.add(vertice);
+    }
+        
+    
+    public void initDFS(Grafo grafo, Vertice vInic){      
         for(Vertice v: grafo.getListaVertices()){
             v.color=0;
             v.dist=0;
             v.predecessor=null;
         }
+        ordenTop = new ArrayList<>();
+        tempo = 0;
+        if(vInic.getColor()==0)
+            DFSVisit(grafo, vInic);
+        for(Vertice v: grafo.getListaVertices()){
+            if(v.getColor()==0)
+                DFSVisit(grafo, v);
+        }
+        //DFSProcess(grafo);
+        return;
+    }
+    public void DFSProcess(Grafo grafo){
+        for(Vertice v : grafo.getListaVertices()){
+            System.out.println("Vertice "+v.getId()+" Descoberto tempo: "+v.getTdescoberto()+" Finalizado tempo: "+v.getTfinal());
+        }
+    }
+    
+    public Arvore initBFS(Grafo grafo, Vertice vInic){
+        for(Vertice v: grafo.getListaVertices()){
+            v.color=0;
+            v.dist=0;
+            v.predecessor=null;
+        }
+        ArrayList<Vertice> impar = new ArrayList<>();
+        ArrayList<Vertice> par = new ArrayList<>();
         vInic.color=1;
         vInic.dist=0;
         vInic.predecessor=null;        
         System.out.println("Iniciando busca no Vertice: "+vInic.getId()+" \nCor: "+vInic.getColor()+" \nDistância: "+vInic.getDist());
         ArrayList<Vertice> filaBFS = new ArrayList<>();
         ArrayList<Vertice> listaBusca = new ArrayList<>();
-        filaBFS.add(vInic);
+        filaBFS.add(vInic);  
+        ArrayList<Arvore> filh = new ArrayList<>();
+        Arvore a1 = new Arvore(vInic,filh); 
+        Arvore aux = a1;
         while(filaBFS.size()!=0){
             Vertice v1 = filaBFS.get(0);
             filaBFS.remove(0);
+            //aux = primeiro filho nao visitado
+            if(aux.getFilhos().size()>0){
+                aux = aux.getFilhos().get(getFilhoNaoVisitado(aux));
+            }
             for(Vertice vAdj: (geraListaAdj(grafo).get(getIndex(v1, grafo)))){
-                if(vAdj.getColor()==0){
+                if(vAdj.getColor()==0){                    
+                    //aux = aux.getFilhos().get(0);
                     vAdj.setColor(1);//SETA COR CINZA DESCOBRE VERTICE
                     listaBusca.add(vAdj);
                     vAdj.setDist(v1.getDist()+1);
+                    
+                    if(vAdj.getDist()%2==1)//IMPAR
+                        impar.add(vAdj);
+                    if(vAdj.getDist()%2==0)//PAR
+                        par.add(vAdj);
+                    
                     vAdj.setPredecessor(v1);                    
                     //System.out.println("Vertice: "+vAdj.getId()+" Cor: "+vAdj.getColor()+" Distância: "+vAdj.getDist());
                     filaBFS.add(vAdj);
+                    ArrayList<Arvore> filho = new ArrayList<>();
+                    aux.getFilhos().add(new Arvore(vAdj,filho));                    
                 }
             }
+            aux.setVisitado(true);
             v1.setColor(2);//SET COR PRETA
             //System.out.println("Vertice: "+v1.getId()+" Cor: "+v1.getColor()+" Distância: "+v1.getDist());
         }
-        for(Vertice v: listaBusca){
-            System.out.println("Vertice: "+v.getId()+" Cor: "+v.getColor()+" Distância: "+v.getDist());
+        //comparar conjuntos pares e impares pra ver se grafo é bipartido
+        int flag = 0;
+        for(int i=0;i<par.size();i++){
+            for(Aresta a : grafo.getListaArestas()){
+                if(par.get(i).getId()==a.getOrigem().getId()){//ENCONTRA ARESTA QUE TEM ORIGEM NUM VERTICE PAR
+                    for(Vertice parn: par){
+                        if(a.getDestino().getId()==parn.getId())//ENCONTRA ARESTA QUE TEM ORIGEM e DESTINO NUM VERTICE PAR
+                            flag=1;
+                    }
+                }
+            }
         }
+        for(int i=0;i<impar.size();i++){
+            for(Aresta a : grafo.getListaArestas()){
+                if(impar.get(i).getId()==a.getOrigem().getId()){//ENCONTRA ARESTA QUE TEM ORIGEM NUM VERTICE IMPAR
+                    for(Vertice imparn: impar){
+                        if(a.getDestino().getId()==imparn.getId())//ENCONTRA ARESTA QUE TEM ORIGEM e DESTINO NUM VERTICE IMPAR
+                            flag=1;
+                    }
+                }
+            }
+        }
+        if(flag==0)
+            System.out.println("grafo bipartido");
+        else
+            System.out.println("grafo naobipartido");
+        
+        
+        //reset visitados
+        resetVisit(a1);        
+        return a1;
     }
     
     public Grafo iniciaGrafo(){
@@ -250,4 +364,32 @@ public class Grafo {
             System.out.println();
         }
     }
+
+    private int getFilhoNaoVisitado(Arvore aux) {
+        if(aux.isVisitado())
+            for(int i=0;i<aux.getFilhos().size();i++){
+                Arvore a1 = aux.getFilhos().get(i);
+                if(!a1.isVisitado())
+                    return i;
+            }
+        return -1;
+    }
+    void printArvoreBusca(Arvore a) {
+        int tam = a.getSize();
+        System.out.println(" Vertice "+a.getRaiz().getId()+" Nível "+a.getRaiz().getDist());
+        for(int i=0;i<tam;i++){            
+            printArvoreBusca(a.getFilhos().get(i));
+        }
+    }
+
+    private void resetVisit(Arvore a1) {        
+        a1.setVisitado(false);
+        int tam = a1.getSize();
+        Arvore aux = a1;
+        for(int i=0;i<tam;i++){
+            resetVisit(a1.getFilhos().get(i));
+        }
+        return;
+    }
+    
 }

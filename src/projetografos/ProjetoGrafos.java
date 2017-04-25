@@ -33,6 +33,8 @@ public class ProjetoGrafos {
             System.out.println("7-Gerar Lista de Adjacência");
             System.out.println("8-Gerar Matriz de Adjacência");
             System.out.println("9-Busca em Largura");
+            System.out.println("10-Busca em Profundidade");
+            System.out.println("11-Ordenação Topológica");
             System.out.println("0-Sair\n");
             Scanner sc = new Scanner(System.in);
             resp = sc.nextInt();
@@ -86,7 +88,16 @@ public class ProjetoGrafos {
                 Scanner sc2 = new Scanner(System.in);
                 resp2 = sc2.nextInt();
                 Vertice busca = grafo.getVertice(resp2, grafo);
-                grafo.initBFS(grafo, busca);
+                Arvore a = grafo.initBFS(grafo, busca);
+                grafo.printArvoreBusca(a);
+            }else if(resp==10){
+                System.out.println("Informe ID do vértice inicial da busca: ");
+                Scanner sc2 = new Scanner(System.in);
+                resp2 = sc2.nextInt();
+                Vertice busca = grafo.getVertice(resp2, grafo);
+                grafo.initDFS(grafo, busca);
+            }else if(resp==11){                
+                grafo.OrdenacaoTopologica();
             }else{
                 System.out.println("System close");
                 System.exit(0);

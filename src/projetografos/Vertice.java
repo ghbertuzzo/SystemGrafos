@@ -17,6 +17,24 @@ public class Vertice {
     Integer color;
     Integer dist;
     Vertice predecessor;
+    Integer tdescoberto;
+
+    public Integer getTdescoberto() {
+        return tdescoberto;
+    }
+
+    public void setTdescoberto(Integer tdescoberto) {
+        this.tdescoberto = tdescoberto;
+    }
+
+    public Integer getTfinal() {
+        return tfinal;
+    }
+
+    public void setTfinal(Integer tfinal) {
+        this.tfinal = tfinal;
+    }
+    Integer tfinal;
     
     public Vertice(Integer id) {
         this.id = id;
@@ -54,3 +72,4 @@ public class Vertice {
         this.id = id;
     }    
 }
+
